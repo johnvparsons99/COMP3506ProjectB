@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class SecurityDB extends SecurityDBBase {
 
     /* Fields */
@@ -12,7 +14,7 @@ public class SecurityDB extends SecurityDBBase {
     public SecurityDB(int numPlanes, int numPassengersPerPlane) {
         super(numPlanes, numPassengersPerPlane);
         this.tableSize = INITIAL_TABLE_SIZE;
-        this.passengers = new Passenger[getTableSize()];
+        this.passengers = new Passenger[tableSize];
     }
 
     /* Implement all the necessary methods here */
@@ -27,26 +29,22 @@ public class SecurityDB extends SecurityDBBase {
     public int calculateHashCode(String key) {
         // Hash Function
         // Cumulative Component Sum
-        System.out.println("===== Hashing =====");
+        //System.out.println("===== Hashing =====");
         int hash = 0;
 
         for (int i = 0; i < key.length(); i++) {
             int ascii = (int) key.charAt(i);
-            System.out.println(ascii);
+            //System.out.println(ascii);
             hash += ascii;
         }
-        System.out.println(hash);
+        //System.out.println(hash);
 
         return hash;
     }
 
     public int compressHash(int hash) {
         // Compression Function
-        return  hash % getTableSize();
-    }
-
-    public int linearProbe(int hash, int probe) {
-        return hash + probe;
+        return  hash % tableSize;
     }
 
     /**
@@ -93,16 +91,26 @@ public class SecurityDB extends SecurityDBBase {
         // Find Index
         int i = 0;
         int hash = calculateHashCode(passportId);
+        System.out.println("===== Adding Passenger =====");
 
         while (i<this.getTableSize()) {
-
             int index = compressHash(hash + i);
-
             // Check if index is empty
-
+            if (passengers[index] == null) {
+                // If yes then set passenger
+                passengers[index] = new Passenger(name,
+                        passportId,
+                        calculateHashCode(passportId));
+                System.out.println(Arrays.toString(passengers));
+                return true;
+            } else if (passengers[index].id.equals(passportId)) {
+                // Passenger with same ID already exists
+                System.out.println(Arrays.toString(passengers));
+                return false;
+            }
             i++;
         }
-
+        System.out.println(Arrays.toString(passengers));
         return false;
     }
 
@@ -176,9 +184,12 @@ public class SecurityDB extends SecurityDBBase {
         VM options of SecurityDB's run configuration
      */
     public static void main(String[] args) {
+
+        System.out.println("Hello\n");
         SecurityDB db = new SecurityDB(3, 2);
 
         // add
+        System.out.println("\nAdding\n");
         db.addPassenger("Rob Bekker", "Asb23f");
         db.addPassenger("Kira Adams", "MKSD23");
         db.addPassenger("Kira Adams", "MKSD24");
@@ -202,6 +213,8 @@ public class SecurityDB extends SecurityDBBase {
         db.addPassenger("Rob Bekker", "Asb23f");
         db.addPassenger("Robert Bekker", "Asb23f");
         // Should print a warning to stderr
+
+        System.out.println("DONE");
     }
 }
 
