@@ -1,10 +1,10 @@
-import java.util.Objects;
+
 
 public class SecurityDB extends SecurityDBBase {
 
     /* Fields */
     /** Initial HashTable size M */
-    private final int INITIAL_TABLE_SIZE = 4;
+    private final int INITIAL_TABLE_SIZE = 859; //4;
     private int tableSize;
 
     private Passenger[] passengers;
@@ -31,11 +31,13 @@ public class SecurityDB extends SecurityDBBase {
         // Cumulative Component Sum
         // System.out.println("===== Hashing =====");
         int hash = 0;
+        int asciiSum = 0;
 
         for (int i = 0; i < key.length(); i++) {
             int ascii = (int) key.charAt(i);
             // System.out.println(ascii);
-            hash += ascii;
+            asciiSum += ascii;
+            hash += (1 + asciiSum);
         }
         // System.out.printf("HASH(%s): %d\n", key, hash);
 
@@ -112,27 +114,26 @@ public class SecurityDB extends SecurityDBBase {
 
         while (i<this.getTableSize()) {
             int index = compressHash(hash + i);
-            //System.out.printf("Previous Visits: %d", passengers[index].numVisits);
             // System.out.printf("INDEX: %d\n", index);
 
             // Check if index is empty
-            if (passengers[index] == null || Objects.equals(passengers[index].getId(), "")) {
+            if (passengers[index] == null || passengers[index].getId().equals("")) {
                 passengers[index] = new Passenger(name, passportId, hash);
                 // System.out.println("Success");
                 return true;
             } else { //
                 // Could be just a collision
-                if (!Objects.equals(passengers[index].getId(), passportId)) {
+                if (!passengers[index].getId().equals(passportId)) {
                     i++;
                     // System.out.println("Collision");
                 } else { // Same ID so either imposter or repeat visitor
-                    if (!Objects.equals(passengers[index].getName(), name)) {
+                    if (!passengers[index].getName().equals(name)) {
                         // Passenger has same ID but different name
                         // Security Alert
                         System.err.print("Suspicious behaviour");
                         return false;
 
-                    } else if (Objects.equals(passengers[index].getName(), name)) {
+                    } else if (passengers[index].getName().equals(name)) {
                         // Passenger has same ID and same name
                         // Check maximum visits
                         // System.out.println("Same Name");
@@ -166,7 +167,15 @@ public class SecurityDB extends SecurityDBBase {
      */
     @Override
     public int count() {
-        return 0;
+        int count = 0;
+
+        for(int i=0; i<tableSize;i++) {
+            if(passengers[i] != null) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -190,7 +199,7 @@ public class SecurityDB extends SecurityDBBase {
                 // Passenger Does not Exist
                 return -1;
             } else {
-                if (Objects.equals(passengers[index].getId(), passportId)) {
+                if (passengers[index].getId().equals(passportId)) {
                     // Found Passenger
                     return index;
                 } else {
@@ -213,8 +222,6 @@ public class SecurityDB extends SecurityDBBase {
         return tableSize;
     }
 
-
-
     private void copyPassenger(Passenger passenger) {
 
         String passportId = passenger.getId();
@@ -230,7 +237,7 @@ public class SecurityDB extends SecurityDBBase {
             int index = compressHash(hash + i);
 
             // Check if index is empty
-            if (passengers[index] == null || Objects.equals(passengers[index].getId(), "")) {
+            if (passengers[index] == null || passengers[index].getId().equals("")) {
                 passengers[index] = new Passenger(name, passportId, hash);
                 passengers[index].setNumVisits(numVisits);
                 return;
@@ -257,7 +264,7 @@ public class SecurityDB extends SecurityDBBase {
         for(int i=0; i<tableSize; i++) {
             System.out.print("|");
             if (passengers[i] != null) {
-                if (Objects.equals(passengers[i].getId(), "")) {
+                if (passengers[i].getId().equals("")) {
                     System.out.print("000000");
                 } else {
                     System.out.print(passengers[i].getId());
@@ -281,85 +288,65 @@ public class SecurityDB extends SecurityDBBase {
         Note: to enable assertions, you need to add the "-ea" flag to the
         VM options of SecurityDB's run configuration
      */
-    public static void main(String[] args) {
-        System.out.println("===== Hello =====");
-        SecurityDB db = new SecurityDB(3, 2);
-
-        // add
-        db.addPassenger("Rob Bekker", "Asb23f");
-
-        // Same Name
-        //System.out.println("+++++ Same Name +++++");
-        db.addPassenger("Kira Adams", "MKSD23");
-        db.addPassenger("Kira Adams", "MKSD24");
-        db.addPassenger("Jess Smith", "MKSD2d");
-        //System.out.println("+++++ +++++ +++++");
-
-        // Collision
-        //System.out.println("+++++ Collision +++++");
-        db.visualize();
-        db.addPassenger("Rick Woodsmith", "MKSD42");
-        db.addPassenger("Ryan Holly", "SKDM24");
-        db.addPassenger("Reid Richards", "DSMK24");
-        db.addPassenger("Riley McDonald", "KSMD42");
-        //System.out.println("+++++ +++++ +++++");
-        db.visualize();
-
-        db.addPassenger("Jonah Simms", "Xfv67s");
-        db.addPassenger("David Lou", "BiD28q");
-        db.addPassenger("Sandra Lou", "rKl08r");
-        db.visualize();
-
-        System.out.println("===== DONE ADDING =====");
-        System.out.printf("Found: %s\n", db.get("SDMK042"));
-
-        db.remove("SKDM240");
-        db.visualize();
-        System.out.printf("Found: %s\n", db.get("DSMK240"));
-
-
-        // Double Check in
-        //System.out.println("+++++ Double Check in +++++");
-        // db.addPassenger("Rob Bekker", "Asb23f");
-        //System.out.println("+++++ +++++ +++++");
-
-        // Too many Check ins
-//        System.out.println("+++++ Too many Check ins +++++");
+//    public static void main(String[] args) {
+//        System.out.println("===== Hello =====");
+//        SecurityDB db = new SecurityDB(3, 2);
+//
+//        // add
 //        db.addPassenger("Rob Bekker", "Asb23f");
-//        db.addPassenger("Rob Bekker", "Asb23f");
-//        db.addPassenger("Rob Bekker", "Asb23f");
-//        db.addPassenger("Rob Bekker", "Asb23f");
-//        System.out.println("+++++ +++++ +++++ ");
-
-        // Same ID Different Name
-        //System.out.println("+++++ Same ID Different Name +++++");
-//        db.addPassenger("Kira Williams", "MKSD23");
-        //System.out.println("+++++ +++++ +++++");
-
-
-        assert db.contains("Asb23f");
-
-        db.calculateHashCode("Asb23f");
-
-        // count
-        assert db.count() == 3;
-
-        // del
-        // db.remove("MKSD23");
-        assert !db.contains("MKSD23");
-        assert db.contains("Asb23f");
-
-        // hashcodes
-        assert db.calculateHashCode("Asb23f") == 1717;
-
-        // suspicious
-//        db = new SecurityDB(3, 2);
-//        db.addPassenger("Rob Bekker", "Asb23f");
-//        db.addPassenger("Robert Bekker", "Asb23f");
-        // Should print a warning to stderr
-
-        System.out.println("===== END =====");
-    }
+//
+//        // Same Name
+//        //System.out.println("+++++ Same Name +++++");
+//        db.addPassenger("Kira Adams", "MKSD23");
+//        db.addPassenger("Kira Adams", "MKSD24");
+//        db.addPassenger("Jess Smith", "MKSD2d");
+//        //System.out.println("+++++ +++++ +++++");
+//
+//        // Collision
+//        //System.out.println("+++++ Collision +++++");
+//        db.visualize();
+//        db.addPassenger("Rick Woodsmith", "MKSD42");
+//        db.addPassenger("Ryan Holly", "SKDM24");
+//        db.addPassenger("Reid Richards", "DSMK24");
+//        db.addPassenger("Riley McDonald", "KSMD42");
+//        //System.out.println("+++++ +++++ +++++");
+//        db.visualize();
+//
+//        db.addPassenger("Jonah Simms", "Xfv67s");
+//        db.addPassenger("David Lou", "BiD28q");
+//        db.addPassenger("Sandra Lou", "rKl08r");
+//        db.visualize();
+//
+//        System.out.println("===== DONE ADDING =====");
+//        System.out.printf("Found: %s\n", db.get("SKDM24"));
+//
+//        db.remove("SKDM24");
+//        db.visualize();
+//        System.out.printf("Found: %s\n", db.get("SKDM24"));
+//
+//        assert db.contains("Asb23f");
+//
+//        System.out.println(db.calculateHashCode("Asb23f"));
+//
+//        // count
+//        assert db.count() == 3;
+//
+//        // del
+//        // db.remove("MKSD23");
+//        assert !db.contains("MKSD23");
+//        assert db.contains("Asb23f");
+//
+//        // hashcodes
+//        assert db.calculateHashCode("Asb23f") == 1717;
+//
+//        // suspicious
+////        db = new SecurityDB(3, 2);
+////        db.addPassenger("Rob Bekker", "Asb23f");
+////        db.addPassenger("Robert Bekker", "Asb23f");
+//        // Should print a warning to stderr
+//
+//        System.out.println("===== END =====");
+//    }
 }
 
 /* Add any additional helper classes here */

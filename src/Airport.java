@@ -14,41 +14,121 @@ public class Airport extends AirportBase {
     }
 
     /* Implement all the necessary methods of the Airport here */
+    /**
+     * Given a terminal and a shuttle, returns the other terminal that the
+     * shuttle travels between.
+     *
+     * @param shuttle  shuttle to look for opposite terminal on
+     * @param terminal terminal to find opposite of
+     * @return opposite terminal or null if the shuttle is not incident to
+     * the given terminal
+     */
     @Override
     public TerminalBase opposite(ShuttleBase shuttle, TerminalBase terminal) {
         return null;
     }
 
+    /**
+     * Adds the given terminal to the airport, and returns the added terminal.
+     *
+     * @param terminal terminal to add
+     * @return terminal that was added
+     */
     @Override
     public TerminalBase insertTerminal(TerminalBase terminal) {
         return null;
     }
 
+    /**
+     * Creates and returns a new shuttle connecting origin to destination.
+     * All shuttles are bidirectional.
+     *
+     * @param origin      origin terminal of shuttle
+     * @param destination destination terminal of shuttle
+     * @param time        time it takes to go from origin to destination, in minutes
+     * @return newly created shuttle
+     */
     @Override
     public ShuttleBase insertShuttle(TerminalBase origin, TerminalBase destination, int time) {
         return null;
     }
 
+    /**
+     * Removes the given terminal and all of its incident shuttles from
+     * the airport. All shuttles going to/from the given terminal should
+     * be removed.
+     *
+     * @param terminal terminal to remove
+     * @return true if removed successfully, false otherwise (if the terminal
+     * was not in the airport)
+     */
     @Override
     public boolean removeTerminal(TerminalBase terminal) {
         return false;
     }
 
+    /**
+     * Removes the given shuttle from the airport.
+     *
+     * @param shuttle shuttle to remove
+     * @return true if removed successfully, false otherwise (if the shuttle
+     * was not in the airport)
+     */
     @Override
     public boolean removeShuttle(ShuttleBase shuttle) {
         return false;
     }
 
+    /**
+     * Returns a list of all shuttles incident to the given terminal.
+     *
+     * @param terminal terminal to find incident shuttles of
+     * @return list of incident shuttles
+     */
     @Override
     public List<ShuttleBase> outgoingShuttles(TerminalBase terminal) {
         return null;
     }
 
+    /**
+     * Returns the shortest path between the given origin and destination
+     * terminals. The shortest path is the path that requires the least number
+     * of shuttles.
+     * <p>
+     * The returned Path consists of a list of terminals in the path, and the
+     * total time spent travelling along the path. The first element of the
+     * Path's terminal list should be the given origin terminal, and the last
+     * element should be the given destination terminal. Any intermediate
+     * terminals in the path should appear in the list in the order travelled.
+     *
+     * @param origin      the starting terminal
+     * @param destination the destination terminal
+     * @return Path instance containing the list of terminals and the total
+     * time taken in the path, or null if destination is not reachable from
+     * origin
+     */
     @Override
     public Path findShortestPath(TerminalBase origin, TerminalBase destination) {
         return null;
     }
 
+    /**
+     * Returns the fastest path between the given origin and destination
+     * terminals. The fastest path has the lowest total time spent travelling
+     * and waiting.
+     * <p>
+     * The returned Path consists of a list of terminals in the path, and the
+     * total time spent travelling along the path. The first element of the
+     * Path's terminal list should be the given origin terminal, and the last
+     * element should be the given destination terminal. Any intermediate
+     * terminals in the path should appear in the list in the order travelled.
+     *
+     * @param origin      the starting terminal
+     * @param destination the destination terminal
+     * @return Path instance containing the list of terminals and the total
+     * time taken in the path, or null if destination is not reachable from
+     * origin
+     */
     @Override
     public Path findFastestPath(TerminalBase origin, TerminalBase destination) {
         return null;
