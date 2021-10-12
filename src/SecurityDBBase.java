@@ -6,7 +6,7 @@
 public abstract class SecurityDBBase {
 
     /** Maximum capacity of the hashtable */
-    public static final int MAX_CAPACITY = 1021;
+    public static final int MAX_CAPACITY = 15; // 1021
 
     /** Number of planes per day */
     private int numPlanes;
