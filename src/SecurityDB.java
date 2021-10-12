@@ -66,28 +66,14 @@ public class SecurityDB extends SecurityDBBase {
     @Override
     public String get(String passportId) {
 
-        // Find Index
-        System.out.println("===== Getting=====");
-        int i = 0;
-        int hash = calculateHashCode(passportId);
+        int index = getIndex(passportId);
 
-        while (i<this.getTableSize()) {
-            int index = compressHash(hash + i);
-
-            // Check if index is empty
-            if (passengers[index] == null) {
-                // Passenger Does not Exist
-                return null;
-            } else {
-                if (Objects.equals(passengers[index].getId(), passportId)) {
-                    // Found Passenger
-                    return passengers[index].getName();
-                } else {
-                    i++;
-                }
-            }
+        if (index < 0) {
+            // Not found
+            return null;
+        } else {
+            return passengers[index].getName();
         }
-        return null;
     }
 
     /**
@@ -99,29 +85,15 @@ public class SecurityDB extends SecurityDBBase {
     @Override
     public boolean remove(String passportId) {
 
-        // Find Index
-        System.out.println("===== Removing =====");
-        int i = 0;
-        int hash = calculateHashCode(passportId);
+        int index = getIndex(passportId);
 
-        while (i<this.getTableSize()) {
-            int index = compressHash(hash + i);
-
-            // Check if index is empty
-            if (passengers[index] == null) {
-                // Passenger Does not Exist
-                return false;
-            } else {
-                if (Objects.equals(passengers[index].getId(), passportId)) {
-                    // Found Passenger
-                    passengers[index].delete();
-                    return true;
-                } else {
-                    i++;
-                }
-            }
+        if (index < 0) {
+            // Not Found
+            return false;
+        } else {
+            passengers[index].delete();
+            return true;
         }
-        return false;
     }
 
     /**
@@ -135,41 +107,41 @@ public class SecurityDB extends SecurityDBBase {
     public boolean addPassenger(String name, String passportId) {
         // Find Index
         int i = 0;
-        System.out.println("===== Adding =====");
+        // System.out.println("===== Adding =====");
         int hash = calculateHashCode(passportId);
 
         while (i<this.getTableSize()) {
             int index = compressHash(hash + i);
             //System.out.printf("Previous Visits: %d", passengers[index].numVisits);
-            System.out.printf("INDEX: %d\n", index);
+            // System.out.printf("INDEX: %d\n", index);
 
             // Check if index is empty
             if (passengers[index] == null || Objects.equals(passengers[index].getId(), "")) {
                 passengers[index] = new Passenger(name, passportId, hash);
-                System.out.println("Success");
+                // System.out.println("Success");
                 return true;
             } else { //
                 // Could be just a collision
                 if (!Objects.equals(passengers[index].getId(), passportId)) {
                     i++;
-                    System.out.println("Collision");
+                    // System.out.println("Collision");
                 } else { // Same ID so either imposter or repeat visitor
                     if (!Objects.equals(passengers[index].getName(), name)) {
                         // Passenger has same ID but different name
                         // Security Alert
-                        System.out.println("Security Alert");
+                        System.err.print("Suspicious behaviour");
                         return false;
 
                     } else if (Objects.equals(passengers[index].getName(), name)) {
                         // Passenger has same ID and same name
                         // Check maximum visits
-                        System.out.println("Same Name");
+                        // System.out.println("Same Name");
                         passengers[index].markVisit();
-                        if (passengers[index].getNumVisits() < 5) {
-                            System.out.printf("Visit %d\n", passengers[index].numVisits);
+                        if (passengers[index].getNumVisits() <= 5) {
+                            // System.out.printf("Visit %d\n", passengers[index].numVisits);
                             return true;
                         } else {
-                            System.out.println("Too Many Visits");
+                            System.err.print("Suspicious behaviour");
                             return false;
                         }
                     }
@@ -180,9 +152,9 @@ public class SecurityDB extends SecurityDBBase {
         // If we've exited the loop then we've run out of space
         // If not at MAX_SIZE of 1021 then set to MAX_SIZE
         // Else table is full and at max size so can't add more passengers
-        if (this.tableSize != MAX_CAPACITY) {
-            System.out.println("Resize");
-            resizeTable();
+        if (this.tableSize < MAX_CAPACITY) {
+            // System.out.println("Resize");
+            return resizeTable(name, passportId);
         }
         return false;
     }
@@ -206,7 +178,7 @@ public class SecurityDB extends SecurityDBBase {
     @Override
     public int getIndex(String passportId) {
         // Find Index
-        System.out.println("===== Getting=====");
+        // System.out.println("===== Getting=====");
         int i = 0;
         int hash = calculateHashCode(passportId);
 
@@ -251,7 +223,7 @@ public class SecurityDB extends SecurityDBBase {
 
         // Find Index
         int i = 0;
-        System.out.println("===== Copying =====");
+        // System.out.println("===== Copying =====");
         int hash = calculateHashCode(passportId);
 
         while (i<this.getTableSize()) {
@@ -267,7 +239,7 @@ public class SecurityDB extends SecurityDBBase {
         }
     }
 
-    private void resizeTable(){
+    private boolean resizeTable(String name, String passportId){
         // Make New table
         Passenger[] oldTable = passengers;
         this.passengers = new Passenger[MAX_CAPACITY];
@@ -277,6 +249,8 @@ public class SecurityDB extends SecurityDBBase {
         for(int i=0; i<oldTableSize; i++) {
             copyPassenger(oldTable[i]);
         }
+
+        return addPassenger(name, passportId);
     }
 
     private void visualize(){
@@ -284,12 +258,12 @@ public class SecurityDB extends SecurityDBBase {
             System.out.print("|");
             if (passengers[i] != null) {
                 if (Objects.equals(passengers[i].getId(), "")) {
-                    System.out.print("000");
+                    System.out.print("000000");
                 } else {
-                    System.out.print(passengers[i].getHash());
+                    System.out.print(passengers[i].getId());
                 }
             } else {
-                System.out.print("   ");
+                System.out.print("      ");
             }
         }
         System.out.println("|");
@@ -318,26 +292,26 @@ public class SecurityDB extends SecurityDBBase {
         //System.out.println("+++++ Same Name +++++");
         db.addPassenger("Kira Adams", "MKSD23");
         db.addPassenger("Kira Adams", "MKSD24");
+        db.addPassenger("Jess Smith", "MKSD2d");
         //System.out.println("+++++ +++++ +++++");
 
         // Collision
         //System.out.println("+++++ Collision +++++");
-        db.addPassenger("Jess Smith", "MKSD2d");
         db.visualize();
-        db.addPassenger("Rick Woodsmith", "MKSD240");
-        db.addPassenger("Ryan Holly", "SKDM240");
-        db.addPassenger("Reid Richards", "DSMK240");
-        db.addPassenger("Riley McDonald", "KSMD420");
+        db.addPassenger("Rick Woodsmith", "MKSD42");
+        db.addPassenger("Ryan Holly", "SKDM24");
+        db.addPassenger("Reid Richards", "DSMK24");
+        db.addPassenger("Riley McDonald", "KSMD42");
         //System.out.println("+++++ +++++ +++++");
         db.visualize();
 
-        db.addPassenger("Jonah Simms", "Xfvb67s");
+        db.addPassenger("Jonah Simms", "Xfv67s");
         db.addPassenger("David Lou", "BiD28q");
         db.addPassenger("Sandra Lou", "rKl08r");
         db.visualize();
 
         System.out.println("===== DONE ADDING =====");
-        System.out.printf("Found: %s\n", db.get("DSMK240"));
+        System.out.printf("Found: %s\n", db.get("SDMK042"));
 
         db.remove("SKDM240");
         db.visualize();
