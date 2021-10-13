@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7821a561-fc35-4920-8a59-8a8785ef41b0" name="Changes" comment="Commiting unversioned files.">
-      <change beforePath="$USER_HOME$/Documents/University/COMP3506/Project B/COMP3506ProjectB/.idea/workspace.xml" beforeDir="false" afterPath="$USER_HOME$/Documents/University/COMP3506/Project B/COMP3506ProjectB/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$USER_HOME$/Documents/University/COMP3506/Project B/COMP3506ProjectB/src/Airport.java" beforeDir="false" afterPath="$USER_HOME$/Documents/University/COMP3506/Project B/COMP3506ProjectB/src/Airport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/src/Airport.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/src/Airport.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,10 +13,10 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$USER_HOME$/Documents/University/COMP3506/Project B/COMP3506ProjectB" value="master" />
+        <entry key="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB" value="master" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$USER_HOME$/Documents/University/COMP3506/Project B/COMP3506ProjectB" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -51,6 +51,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Airport" />
+      <item itemvalue="Application.SecurityDB" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Airport" />
