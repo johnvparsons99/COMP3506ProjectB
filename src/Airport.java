@@ -3,6 +3,10 @@ import java.util.stream.Collectors;
 
 public class Airport extends AirportBase {
 
+    /* Fields */
+    private final HashMap<String, Terminal> adjacencyList;
+
+
     /**
      * Creates a new AirportBase instance with the given capacity.
      *
@@ -11,6 +15,7 @@ public class Airport extends AirportBase {
      */
     public Airport(int capacity) {
         super(capacity);
+        adjacencyList = new HashMap<String, Terminal>(100);
     }
 
     /* Implement all the necessary methods of the Airport here */
@@ -25,7 +30,16 @@ public class Airport extends AirportBase {
      */
     @Override
     public TerminalBase opposite(ShuttleBase shuttle, TerminalBase terminal) {
-        return null;
+        int index = this.adjacencyList.get(terminal.getId()).getShuttlesList().indexOf((Shuttle) shuttle);
+        if (index > 0) {
+            if (this.adjacencyList.get(terminal.getId()).getShuttlesList().get(index).getOrigin().equals(terminal)) {
+                return this.adjacencyList.get(terminal.getId()).getShuttlesList().get(index).getDestination();
+            } else {
+                return this.adjacencyList.get(terminal.getId()).getShuttlesList().get(index).getOrigin();
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -36,7 +50,8 @@ public class Airport extends AirportBase {
      */
     @Override
     public TerminalBase insertTerminal(TerminalBase terminal) {
-        return null;
+        adjacencyList.put(terminal.getId(), (Terminal) terminal);
+        return terminal;
     }
 
     /**
@@ -50,7 +65,11 @@ public class Airport extends AirportBase {
      */
     @Override
     public ShuttleBase insertShuttle(TerminalBase origin, TerminalBase destination, int time) {
-        return null;
+        Shuttle shuttle = new Shuttle(origin, destination, time);
+
+        adjacencyList.get(origin.getId()).addShuttle(shuttle);
+        adjacencyList.get(destination.getId()).addShuttle(shuttle);
+        return shuttle;
     }
 
     /**
@@ -64,6 +83,11 @@ public class Airport extends AirportBase {
      */
     @Override
     public boolean removeTerminal(TerminalBase terminal) {
+        while (!this.adjacencyList.get(terminal.getId()).getShuttlesList().isEmpty()) {
+            ShuttleBase shuttle = this.adjacencyList.get(terminal.getId()).getShuttlesList().pop();
+            removeShuttle(shuttle);
+        }
+        this.adjacencyList.remove(terminal.getId());
         return false;
     }
 
@@ -76,7 +100,16 @@ public class Airport extends AirportBase {
      */
     @Override
     public boolean removeShuttle(ShuttleBase shuttle) {
-        return false;
+        // Go to Origin
+        if (!this.adjacencyList.get(shuttle.getOrigin().getId()).getShuttlesList().remove((Shuttle) shuttle)) {
+            return false;
+        }
+
+        // Go to Destination
+        if (!this.adjacencyList.get(shuttle.getDestination().getId()).getShuttlesList().remove((Shuttle) shuttle)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -87,7 +120,7 @@ public class Airport extends AirportBase {
      */
     @Override
     public List<ShuttleBase> outgoingShuttles(TerminalBase terminal) {
-        return null;
+        return (LinkedList<ShuttleBase>) this.adjacencyList.get(terminal.getId()).getShuttlesList();
     }
 
     /**
@@ -137,6 +170,9 @@ public class Airport extends AirportBase {
     /* End of My Functions */
 
     static class Terminal extends TerminalBase {
+
+       private final LinkedList<ShuttleBase> shuttlesList;
+
         /**
          * Creates a new TerminalBase instance with the given terminal ID
          * and waiting time.
@@ -146,6 +182,15 @@ public class Airport extends AirportBase {
          */
         public Terminal(String id, int waitingTime) {
             super(id, waitingTime);
+            this.shuttlesList = new LinkedList<>();
+        }
+
+        public LinkedList<ShuttleBase> getShuttlesList() {
+            return shuttlesList;
+        }
+
+        public void addShuttle(ShuttleBase shuttle) {
+            this.shuttlesList.add(shuttle);
         }
 
         /* Implement all the necessary methods of the Terminal here */
@@ -189,6 +234,13 @@ public class Airport extends AirportBase {
         Shuttle shuttle3 = (Shuttle) a.insertShuttle(terminalA, terminalD, 18);
         Shuttle shuttle4 = (Shuttle) a.insertShuttle(terminalB, terminalD, 8);
         Shuttle shuttle5 = (Shuttle) a.insertShuttle(terminalC, terminalD, 15);
+
+        System.out.println(a.adjacencyList);
+
+        for (String name: a.adjacencyList.keySet()) {
+            String key = name.toString();
+            System.out.println(key + " " + a.adjacencyList.get(name).shuttlesList);
+        }
 
         // Opposite
         assert a.opposite(shuttle1, terminalA).getId().equals("B");
