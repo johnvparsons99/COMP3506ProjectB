@@ -30,13 +30,10 @@ public class Airport extends AirportBase {
      */
     @Override
     public TerminalBase opposite(ShuttleBase shuttle, TerminalBase terminal) {
-        int index = this.adjacencyList.get(terminal.getId()).getShuttlesList().indexOf((Shuttle) shuttle);
-        if (index > 0) {
-            if (this.adjacencyList.get(terminal.getId()).getShuttlesList().get(index).getOrigin().equals(terminal)) {
-                return this.adjacencyList.get(terminal.getId()).getShuttlesList().get(index).getDestination();
-            } else {
-                return this.adjacencyList.get(terminal.getId()).getShuttlesList().get(index).getOrigin();
-            }
+        if (shuttle.getDestination().getId().equals(terminal.getId())) {
+            return (Terminal) shuttle.getOrigin();
+        } else if (shuttle.getOrigin().getId().equals(terminal.getId())) {
+            return (Terminal) shuttle.getDestination();
         } else {
             return null;
         }
@@ -142,6 +139,39 @@ public class Airport extends AirportBase {
      */
     @Override
     public Path findShortestPath(TerminalBase origin, TerminalBase destination) {
+        Queue<Terminal> queue = new LinkedList<Terminal>();
+        HashSet<Terminal> visited = new HashSet<>();
+        Path path;
+
+        queue.add((Terminal) origin);
+        visited.add((Terminal) origin);
+
+        while (!queue.isEmpty()) {
+            // Check
+            Terminal currentTerminal = queue.poll();
+
+            // Loop Through neighbours
+            for (Shuttle shuttle: currentTerminal.getShuttlesListNonBase()) {
+                Terminal nextTerminal = shuttle.getOpposite(currentTerminal);
+                nextTerminal.setPathTime(currentTerminal.getPathTime() +
+                        currentTerminal.getWaitingTime() +
+                        shuttle.getTime());
+                // Check if visited
+                if (!visited.contains(nextTerminal)) {
+                    visited.add(nextTerminal);
+                    queue.add(nextTerminal);
+
+                    nextTerminal.setPrevious(currentTerminal);
+
+                    if (nextTerminal.getId().equals(destination.getId())) {
+                        path = backtrack(nextTerminal);
+                        queue.clear();
+                        return path;
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
@@ -164,7 +194,27 @@ public class Airport extends AirportBase {
      */
     @Override
     public Path findFastestPath(TerminalBase origin, TerminalBase destination) {
+        PriorityQueue<Terminal> queue;
+
         return null;
+    }
+
+    public Path backtrack(Terminal destination){
+        Terminal currentTerminal = destination;
+        int total_time = destination.getPathTime();
+        LinkedList<Terminal> pathTerminals = new LinkedList<>();
+
+        while (currentTerminal != null) {
+            pathTerminals.add(currentTerminal);
+            currentTerminal = currentTerminal.getPrevious();
+        }
+
+        List<TerminalBase> route = new LinkedList<>();
+        while (!pathTerminals.isEmpty()) {
+            route.add(pathTerminals.removeLast());
+        }
+
+        return new Path(route, total_time);
     }
 
     /* End of My Functions */
@@ -172,6 +222,26 @@ public class Airport extends AirportBase {
     static class Terminal extends TerminalBase {
 
        private final LinkedList<ShuttleBase> shuttlesList;
+
+       private Terminal previous;
+
+        public Terminal getPrevious() {
+            return previous;
+        }
+
+        public void setPrevious(Terminal previous) {
+            this.previous = previous;
+        }
+
+        public int getPathTime() {
+            return pathTime;
+        }
+
+        public void setPathTime(int pathTime) {
+            this.pathTime = pathTime;
+        }
+
+        private int pathTime;
 
         /**
          * Creates a new TerminalBase instance with the given terminal ID
@@ -189,9 +259,20 @@ public class Airport extends AirportBase {
             return shuttlesList;
         }
 
+        public LinkedList<Shuttle> getShuttlesListNonBase() {
+            LinkedList<Shuttle> newShuttlesList = new LinkedList<>();
+
+            for (ShuttleBase shuttle: this.shuttlesList) {
+                newShuttlesList.add(new Shuttle(shuttle.getOrigin(), shuttle.getDestination(), shuttle.getTime()));
+            }
+
+            return newShuttlesList;
+        }
+
         public void addShuttle(ShuttleBase shuttle) {
             this.shuttlesList.add(shuttle);
         }
+
 
         /* Implement all the necessary methods of the Terminal here */
     }
@@ -207,6 +288,16 @@ public class Airport extends AirportBase {
          */
         public Shuttle(TerminalBase origin, TerminalBase destination, int time) {
             super(origin, destination, time);
+        }
+
+        public Terminal getOpposite(Terminal base) {
+            if (this.getDestination().getId().equals(base.getId())) {
+                return (Terminal) this.getOrigin();
+            } else if (this.getOrigin().getId().equals(base.getId())) {
+                return (Terminal) this.getDestination();
+            } else {
+                return null;
+            }
         }
 
         /* Implement all the necessary methods of the Shuttle here */

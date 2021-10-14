@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="7821a561-fc35-4920-8a59-8a8785ef41b0" name="Changes" comment="Commiting unversioned files.">
-      <change beforePath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/src/Airport.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB/src/Airport.java" afterDir="false" />
+    <list default="true" id="7821a561-fc35-4920-8a59-8a8785ef41b0" name="Changes" comment="Added prints and finished get functionality. Must add count() then ready for testing.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/COMP3506ProjectB.iml" beforeDir="false" afterPath="$PROJECT_DIR$/COMP3506ProjectB.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Airport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Airport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +27,7 @@
         <entry key="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB" value="master" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../University/COMP3506/Project B/COMP3506ProjectB" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -27,38 +38,45 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1zJMp61GHYYFyq8spSMmNtrkZsT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.1321004" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
-  <component name="RunManager" selected="Application.Airport">
-    <configuration name="Airport" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager">
+    <configuration name="Airport" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Airport" />
       <module name="COMP3506ProjectB" />
+      <option name="VM_PARAMETERS" value="-ea" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SecurityDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SecurityDB" />
-      <module name="COMP3506ProjectB" />
+    <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Application.Airport" />
-      <item itemvalue="Application.SecurityDB" />
-    </list>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Airport" />
-        <item itemvalue="Application.SecurityDB" />
         <item itemvalue="Application.SecurityDB" />
       </list>
     </recent_temporary>
@@ -100,7 +118,21 @@
       <option name="project" value="LOCAL" />
       <updated>1634017086715</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added prints and finished get functionality. Must add count() then ready for testing.">
+      <created>1634158694044</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1634158694044</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added prints and finished get functionality. Must add count() then ready for testing.">
+      <created>1634158710021</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1634158710021</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -117,9 +149,12 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Adding get functionality." />
-    <MESSAGE value="Added prints and finished get functionality. Must add count() then ready for testing." />
     <MESSAGE value="Finished SecurityDB. Currently, passing all DB related tests." />
     <MESSAGE value="Commiting unversioned files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Commiting unversioned files." />
+    <MESSAGE value="Added prints and finished get functionality. Must add count() then ready for testing." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added prints and finished get functionality. Must add count() then ready for testing." />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/COMP3506ProjectB$Airport.ic" NAME="Airport Coverage Results" MODIFIED="1634169600766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
